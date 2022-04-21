@@ -16,8 +16,11 @@
 
 ## Wire frame
 
-<img  src="" width="200" height="100" alt="Wire frame">
+<img  src="" width="300" height="200" alt="Wire frame">
 
+## ERD
+
+<img  src="img/erd.png" width="200" height="100" alt="ERD">
 
 ---
 
