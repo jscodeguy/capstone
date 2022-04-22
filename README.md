@@ -24,7 +24,7 @@ Turn your life into a game, make your virtual you the coolest guy in the world
 
 ## ERD
 
-<img  src="img/ActualRealERD.png" width="600" height="450" alt="ERD">
+<img  src="img/actualRealERD.png" width="600" height="450" alt="ERD">
 
 ---
 
