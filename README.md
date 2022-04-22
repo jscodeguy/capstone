@@ -16,11 +16,11 @@ Turn your life into a game, make your virtual you the coolest guy in the world
 #### potential sign-up/sign-in page
 <img  src="img/signUp-in.png" width="300" height="200" alt="sign in wireFrame">
 
-#### potential sign-up/sign-in page
+#### potential layout for character and buy screen
 <img  src="img/placeholderForCharacter.png" width="300" height="200" alt="character habitat">
 
-#### potential layout for character and buy screen
-<img  src="img/sample-list.png" width="300" height="200" alt="sign in wireFrame">
+#### potential sample list of to-do's 
+<img  src="img/sample-list.png" width="300" height="200" alt="to-do sample">
 
 ## ERD
 
@@ -38,3 +38,4 @@ Turn your life into a game, make your virtual you the coolest guy in the world
 - Node.js
 ## Stretch goals
 - create more items for character to wear
+- create a game that can use the to-do functiosnality to affect in game elements
