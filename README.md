@@ -13,20 +13,28 @@ Turn your life into a game, make your virtual you the coolest guy in the world
 ---
 
 ## Wire frames
-#### 
-<img  src="" width="300" height="200" alt="Wire frame">
+#### potential sign-up/sign-in page
+<img  src="img/signUp-in.png" width="300" height="200" alt="sign in wireFrame">
 
+#### potential sign-up/sign-in page
+<img  src="img/placeholderForCharacter.png" width="300" height="200" alt="character habitat">
+
+#### potential layout for character and buy screen
+<img  src="img/sample-list.png" width="300" height="200" alt="sign in wireFrame">
 
 ## ERD
 
-<img  src="img/realErd.png" width="400" height="300" alt="ERD">
+<img  src="img/realErd.png" width="600" height="450" alt="ERD">
 
 ---
 
 ## Technologies used
 
-- Python
-- Pygame
-
+- JavaScript
+- React
+- MongoDB
+- Mongoose
+- Express
+- Node.js
 ## Stretch goals
-- 
+- create more items for character to wear
