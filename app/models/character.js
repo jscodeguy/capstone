@@ -18,6 +18,9 @@ const characterSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        ownedItems: {
+            type: Array
+        },
 		owner: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
