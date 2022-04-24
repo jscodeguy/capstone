@@ -11,6 +11,12 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
+		toDoLists: {
+			type: Array
+		},
+		playerCharacter: {
+			type: String
+		},
 		token: String,
 	},
 	{
