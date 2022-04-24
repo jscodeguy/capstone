@@ -95,6 +95,21 @@ router.patch('/items/:id', requireToken, removeBlanks, (req, res, next) => {
 		.catch(next)
 })
 
-
+// DESTROY
+// DELETE /items/5a7db6c74d55bc51bdf39793
+router.delete('/items/:id', requireToken, (req, res, next) => {
+	Item.findById(req.params.id)
+		.then(handle404)
+		.then((item) => {
+			// throw an error if current user doesn't own `item`
+			requireOwnership(req, item)
+			// delete the item ONLY IF the above didn't throw
+			item.deleteOne()
+		})
+		// send back 204 and no content if the deletion succeeded
+		.then(() => res.sendStatus(204))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
 
 module.exports = router
