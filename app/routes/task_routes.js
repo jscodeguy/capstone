@@ -87,7 +87,7 @@ router.patch('/task/:id', requireToken, removeBlanks, (req, res, next) => {
 			requireOwnership(req, task)
 
 			// pass the result of Mongoose's `.update` to the next `.then`
-			return example.updateOne(req.body.task)
+			return task.updateOne(req.body.task)
 		})
 		// if that succeeded, return 204 and no JSON
 		.then(() => res.sendStatus(204))
