@@ -14,7 +14,7 @@ const startItems = [
     { description: 'couch', cost: 10, sprite: "image-url"}
 ]
 
-// first we connect to the db via mongoose
+//first we connect to the db via mongoose
 mongoose.connect(db, {
 	useNewUrlParser: true,
 })
