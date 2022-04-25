@@ -29,7 +29,7 @@ const clientDevPort = 3000
 // use new version of URL parser
 // use createIndex instead of deprecated ensureIndex
 mongoose.connect(db, {
-	useNewUrlParser: true,
+	useNewUrlParser: true
 })
 
 // instantiate express application object
