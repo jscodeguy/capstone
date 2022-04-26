@@ -11,12 +11,10 @@ const characterSchema = new mongoose.Schema(
 			required: true,
 		},
         coins: {
-            type: Number,
-            required: true,
+            type: Number
         },
         sprite: {
             type: String,
-            required: true
         },
         ownedItems: {
             type: Array
