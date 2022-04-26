@@ -44,13 +44,13 @@ router.get('/todo', requireToken, (req, res, next) => {
 })
 
 // // SHOW
-// // GET /examples/5a7db6c74d55bc51bdf39793
-// router.get('/examples/:id', requireToken, (req, res, next) => {
+// // GET /todos/5a7db6c74d55bc51bdf39793
+// router.get('/todos/:id', requireToken, (req, res, next) => {
 // 	// req.params.id will be set based on the `:id` in the route
-// 	Example.findById(req.params.id)
+// 	todo.findById(req.params.id)
 // 		.then(handle404)
-// 		// if `findById` is succesful, respond with 200 and "example" JSON
-// 		.then((example) => res.status(200).json({ example: example.toObject() }))
+// 		// if `findById` is succesful, respond with 200 and "todo" JSON
+// 		.then((todo) => res.status(200).json({ todo: todo.toObject() }))
 // 		// if an error occurs, pass it to the handler
 // 		.catch(next)
 // })
@@ -66,7 +66,7 @@ router.post('/todo', requireToken, (req, res, next) => {
 	req.body.toDoList.owner = req.user.id
 
 	ToDoList.create(req.body.toDoList)
-		// respond to succesful `create` with status 201 and JSON of new "example"
+		// respond to succesful `create` with status 201 and JSON of new "todo"
 		.then((toDoList) => {
 			res.status(201).json({ toDoList: toDoList.toObject() })
 		})
