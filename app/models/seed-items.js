@@ -4,6 +4,7 @@
 
 const mongoose = require('mongoose')
 const Item = require('./item')
+const Character = require('./character')
 
 const db = require('../../config/db')
 
