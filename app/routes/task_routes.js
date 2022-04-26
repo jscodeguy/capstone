@@ -3,7 +3,7 @@ const express = require('express')
 // Passport docs: http://www.passportjs.org/docs/
 const passport = require('passport')
 
-// pull in Mongoose model for examples
+// pull in Mongoose model for tasks
 const Task = require('../models/task')
 
 // this is a collection of methods that help us detect situations when we need
@@ -17,7 +17,7 @@ const handle404 = customErrors.handle404
 const requireOwnership = customErrors.requireOwnership
 
 // this is middleware that will remove blank fields from `req.body`, e.g.
-// { example: { title: '', text: 'foo' } } -> { example: { text: 'foo' } }
+// { task: { title: '', text: 'foo' } } -> { task: { text: 'foo' } }
 const removeBlanks = require('../../lib/remove_blank_fields')
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
@@ -28,41 +28,41 @@ const requireToken = passport.authenticate('bearer', { session: false })
 const router = express.Router()
 
 // INDEX
-// GET /examples
+// GET /tasks
 router.get('/task', requireToken, (req, res, next) => {
 	Task.find()
 		.then((tasks) => {
-			// `examples` will be an array of Mongoose documents
+			// `tasks` will be an array of Mongoose documents
 			// we want to convert each one to a POJO, so we use `.map` to
 			// apply `.toObject` to each one
 			return tasks.map((task) => task.toObject())
 		})
-		// respond with status 200 and JSON of the examples
+		// respond with status 200 and JSON of the tasks
 		.then((tasks) => res.status(200).json({ tasks: tasks }))
 		// if an error occurs, pass it to the handler
 		.catch(next)
 })
 
 // SHOW
-// GET /examples/5a7db6c74d55bc51bdf39793
+// GET /tasks/5a7db6c74d55bc51bdf39793
 router.get('/task/:id', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
 	Task.findById(req.params.id)
 		.then(handle404)
-		// if `findById` is succesful, respond with 200 and "example" JSON
+		// if `findById` is succesful, respond with 200 and "task" JSON
 		.then((task) => res.status(200).json({ task: task.toObject() }))
 		// if an error occurs, pass it to the handler
 		.catch(next)
 })
 
 // CREATE
-// POST /examples
+// POST /tasks
 router.post('/task', requireToken, (req, res, next) => {
-	// set owner of new example to be current user
+	// set owner of new task to be current user
 	req.body.task.owner = req.user.id
 
 	Task.create(req.body.task)
-		// respond to succesful `create` with status 201 and JSON of new "example"
+		// respond to succesful `create` with status 201 and JSON of new "task"
 		.then((task) => {
 			res.status(201).json({ task: task.toObject() })
 		})
@@ -73,7 +73,7 @@ router.post('/task', requireToken, (req, res, next) => {
 })
 
 // UPDATE
-// PATCH /examples/5a7db6c74d55bc51bdf39793
+// PATCH /tasks/5a7db6c74d55bc51bdf39793
 router.patch('/task/:id', requireToken, removeBlanks, (req, res, next) => {
 	// if the client attempts to change the `owner` property by including a new
 	// owner, prevent that by deleting that key/value pair
@@ -96,14 +96,14 @@ router.patch('/task/:id', requireToken, removeBlanks, (req, res, next) => {
 })
 
 // DESTROY
-// DELETE /examples/5a7db6c74d55bc51bdf39793
+// DELETE /tasks/5a7db6c74d55bc51bdf39793
 router.delete('/task/:id', requireToken, (req, res, next) => {
 	Task.findById(req.params.id)
 		.then(handle404)
 		.then((task) => {
-			// throw an error if current user doesn't own `example`
+			// throw an error if current user doesn't own `task`
 			requireOwnership(req, task)
-			// delete the example ONLY IF the above didn't throw
+			// delete the task ONLY IF the above didn't throw
 			task.deleteOne()
 		})
 		// send back 204 and no content if the deletion succeeded
