@@ -43,17 +43,17 @@ router.get('/todo', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-// // SHOW
-// // GET /todos/5a7db6c74d55bc51bdf39793
-// router.get('/todos/:id', requireToken, (req, res, next) => {
-// 	// req.params.id will be set based on the `:id` in the route
-// 	todo.findById(req.params.id)
-// 		.then(handle404)
-// 		// if `findById` is succesful, respond with 200 and "todo" JSON
-// 		.then((todo) => res.status(200).json({ todo: todo.toObject() }))
-// 		// if an error occurs, pass it to the handler
-// 		.catch(next)
-// })
+// SHOW
+// GET /todos/5a7db6c74d55bc51bdf39793
+router.get('/todos/:id', requireToken, (req, res, next) => {
+	// req.params.id will be set based on the `:id` in the route
+	ToDoList.findById(req.params.id)
+		.then(handle404)
+		// if `findById` is succesful, respond with 200 and "todo" JSON
+		.then((todo) => res.status(200).json({ todo: todo.toObject() }))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
 
 // CREATE
 // POST 
