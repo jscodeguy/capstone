@@ -43,14 +43,31 @@ router.get('/character', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
+//SHOW
+//GET user character after sign in
+router.get('/character/view', requireToken, (req, res, next) => {
+	// req.params.id will be set based on the `:id` in the route
+    const userId = req.user._id
+	Character.findOne({owner:userId})
+		.then(handle404)
+   	 	// respond with status 200 and JSON of the characters
+    	.then((character) => {
+			console.log('this is the character in api', character)
+			res.status(200).json({ character: character.toObject() })
+		})
+    	// if an error occurs, pass it to the handler
+		.catch(next)
+})
+
 // SHOW
 // GET /characters/5a7db6c74d55bc51bdf39793
 router.get('/character/:id', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
 	Character.findById(req.params.id)
+		.populate('owner')
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "character" JSON
-		.then((character) => res.status(200).json({ characater: character.toObject() }))
+		.then((character) => res.status(200).json({ character: character.toObject() }))
 		// if an error occurs, pass it to the handler
 		.catch(next)
 })
