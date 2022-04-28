@@ -19,6 +19,7 @@ const requireOwnership = customErrors.requireOwnership
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { task: { title: '', text: 'foo' } } -> { task: { text: 'foo' } }
 const removeBlanks = require('../../lib/remove_blank_fields')
+const { Timestamp } = require('mongodb')
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
@@ -47,6 +48,7 @@ router.get('/task', requireToken, (req, res, next) => {
 // GET /tasks/5a7db6c74d55bc51bdf39793
 router.get('/task/:id', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
+	req.body.task.owner = req.user.id
 	Task.findById(req.params.id)
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "task" JSON
@@ -58,8 +60,7 @@ router.get('/task/:id', requireToken, (req, res, next) => {
 // CREATE
 // POST /tasks
 router.post('/task', requireToken, (req, res, next) => {
-	// set owner of new task to be current user
-	req.body.task.owner = req.user.id
+	
 
 	Task.create(req.body.task)
 		// respond to succesful `create` with status 201 and JSON of new "task"
