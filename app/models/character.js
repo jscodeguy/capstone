@@ -11,7 +11,8 @@ const characterSchema = new mongoose.Schema(
 			required: true,
 		},
         coins: {
-            type: Number
+            type: Number,
+			default: 0
         },
         sprite: {
             type: String,
@@ -23,6 +24,7 @@ const characterSchema = new mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
 			required: true,
+			unique: true
 		},
 	},
 	{
