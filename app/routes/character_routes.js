@@ -77,8 +77,6 @@ router.get('/character/:id', requireToken, (req, res, next) => {
 router.post('/character', requireToken, (req, res, next) => {
 	// set owner of new character to be current user
 	req.body.character.owner = req.user.id
-    req.body.character.coins = 0
-
 	Character.create(req.body.character)
 		// respond to succesful `create` with status 201 and JSON of new "character"
 		.then((character) => {
