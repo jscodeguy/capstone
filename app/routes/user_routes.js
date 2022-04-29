@@ -108,6 +108,7 @@ router.post('/sign-in', (req, res, next) => {
 				// the token will be a 16 byte random hex string
 				const token = crypto.randomBytes(16).toString('hex')
 				user.token = token
+				console.log('this is the user', user)
 				// save the token to the DB as a property on user
 				return user.save()
 			} else {

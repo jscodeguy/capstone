@@ -9,8 +9,8 @@ const characterSchema = new mongoose.Schema(
 		},
 		new: {
 			type: Boolean,
-			required: true,
-			default: true
+			// required: true,
+			default: true,
 		},
 		class: {
 			type: String,
