@@ -22,7 +22,7 @@ const Character = require('../models/character')
 // so that a token MUST be passed for that route to be available
 // it will also set `res.user`
 const requireToken = passport.authenticate('bearer', { session: false })
-
+//we need to make a character and user at the same time
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
