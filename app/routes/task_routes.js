@@ -48,8 +48,8 @@ router.get('/task', requireToken, (req, res, next) => {
 // GET /tasks/5a7db6c74d55bc51bdf39793
 router.get('/task/:id', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
-	req.body.task.owner = req.user.id
-	Task.findById(req.params.id)
+	const taskId = req.params.id
+	Task.findById(taskId)
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "task" JSON
 		.then((task) => res.status(200).json({ task: task.toObject() }))
@@ -60,11 +60,12 @@ router.get('/task/:id', requireToken, (req, res, next) => {
 // CREATE
 // POST /tasks
 router.post('/task', requireToken, (req, res, next) => {
-	
-
+	console.log('this is req.body', req.body)
+	req.body.task.owner = req.user.id
 	Task.create(req.body.task)
-		// respond to succesful `create` with status 201 and JSON of new "task"
-		.then((task) => {
+	// respond to succesful `create` with status 201 and JSON of new "task"
+	.then((task) => {
+			
 			res.status(201).json({ task: task.toObject() })
 		})
 		// if an error occurs, pass it off to our error handler
