@@ -15,7 +15,8 @@ const userSchema = new mongoose.Schema(
 			type: Array
 		},
 		playerCharacter: {
-			type: String
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Character',
 		},
 		token: String,
 	},

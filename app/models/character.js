@@ -5,18 +5,24 @@ const characterSchema = new mongoose.Schema(
 		name: {
 			type: String,
 			required: true,
+			default: 'zonk',
+		},
+		new: {
+			type: Boolean,
+			// required: true,
+			default: true,
 		},
 		class: {
 			type: String,
 			required: true,
+			default: "zink"
 		},
         coins: {
             type: Number,
-            required: true,
+			default: 0
         },
         sprite: {
             type: String,
-            required: true
         },
         ownedItems: {
             type: Array
@@ -24,7 +30,8 @@ const characterSchema = new mongoose.Schema(
 		owner: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
-			required: true,
+			// required: true,
+			unique: true
 		},
 	},
 	{

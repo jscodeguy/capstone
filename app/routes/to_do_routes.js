@@ -4,9 +4,8 @@ const express = require('express')
 const passport = require('passport')
 
 // pull in Mongoose model for items
-const Item = require('../models/item')
-
 const ToDoList = require('../models/todolist')
+
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
 const customErrors = require('../../lib/custom_errors')
@@ -32,39 +31,44 @@ const router = express.Router()
 // GET 
 router.get('/todo', requireToken, (req, res, next) => {
 	ToDoList.find()
-		.then((todolists) => {
+		.then((toDoLists) => {
 			// `todolists` will be an array of Mongoose documents
 			// we want to convert each one to a POJO, so we use `.map` to
 			// apply `.toObject` to each one
-			return todolists.map((example) => example.toObject())
+			return toDoLists.map((toDoList) => toDoList.toObject())
 		})
 		// respond with status 200 and JSON of the todolists
-		.then((todolists) => res.status(200).json({ todolists: todolists }))
+		.then((toDoLists) => res.status(200).json({ toDoLists: toDoLists }))
 		// if an error occurs, pass it to the handler
 		.catch(next)
 })
 
-// // SHOW
-// // GET /examples/5a7db6c74d55bc51bdf39793
-// router.get('/examples/:id', requireToken, (req, res, next) => {
-// 	// req.params.id will be set based on the `:id` in the route
-// 	Example.findById(req.params.id)
-// 		.then(handle404)
-// 		// if `findById` is succesful, respond with 200 and "example" JSON
-// 		.then((example) => res.status(200).json({ example: example.toObject() }))
-// 		// if an error occurs, pass it to the handler
-// 		.catch(next)
-// })
+// SHOW
+// GET /todos/5a7db6c74d55bc51bdf39793
+router.get('/todos/:id', requireToken, (req, res, next) => {
+	// req.params.id will be set based on the `:id` in the route
+	ToDoList.findById(req.params.id)
+		.then(handle404)
+		// if `findById` is succesful, respond with 200 and "todo" JSON
+		.then((todo) => res.status(200).json({ todo: todo.toObject() }))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
 
 // CREATE
 // POST 
 router.post('/todo', requireToken, (req, res, next) => {
     // set up date method here --> (this is to set up a to do list time that will reset daily to our seeded data that is an empty list so that you will have a clear list everyday)
+	const current = new Date()
+	const date = `${current.getMonth() + 1}/${current.getDate()}/${current.getFullYear()}`
 
-	ToDoList.create()
-		// respond to succesful `create` with status 201 and JSON of new "example"
-		.then((example) => {
-			res.status(201).json({ example: example.toObject() })
+	req.body.toDoList.date = date
+	req.body.toDoList.owner = req.user.id
+
+	ToDoList.create(req.body.toDoList)
+		// respond to succesful `create` with status 201 and JSON of new "todo"
+		.then((toDoList) => {
+			res.status(201).json({ toDoList: toDoList.toObject() })
 		})
 		// if an error occurs, pass it off to our error handler
 		// the error handler needs the error message and the `res` object so that it
