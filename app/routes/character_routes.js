@@ -4,7 +4,7 @@ const express = require('express')
 const passport = require('passport')
 
 // pull in Mongoose model for characters
-const Character = require('../models/Character')
+const Character = require('../models/character')
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error

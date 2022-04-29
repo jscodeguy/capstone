@@ -16,6 +16,7 @@ const BadParamsError = errors.BadParamsError
 const BadCredentialsError = errors.BadCredentialsError
 
 const User = require('../models/user')
+const Character = require('../models/character')
 
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
@@ -29,7 +30,7 @@ const router = express.Router()
 // POST /sign-up
 router.post('/sign-up', (req, res, next) => {
 	// start a promise chain, so that any errors will pass to `handle`
-	Promise.resolve(req.body.credentials)
+	const newUser = Promise.resolve(req.body.credentials)
 		// reject any requests where `credentials.password` is not present, or where
 		// the password is an empty string
 		.then((credentials) => {
@@ -53,10 +54,32 @@ router.post('/sign-up', (req, res, next) => {
 		// create user with provided email and hashed password
 		.then((user) => User.create(user))
 		// send the new user object back with status 201, but `hashedPassword`
+		.then( user => {
+			return user
+		})
 		// won't be send because of the `transform` in the User model
-		.then((user) => res.status(201).json({ user: user.toObject() }))
 		// pass any errors along to the error handler
 		.catch(next)
+
+	const newCharacter = Character.create(req.body.character)
+
+		.then( character => {
+			return character
+		})
+		// if an error occurs, pass it to the error handler
+		.catch(next)
+
+		Promise.all([newUser, newCharacter])
+			.then( responseData => {
+				const user = responseData[0]
+				const emptyCharacter = responseData[1]
+				emptyCharacter.owner = user._id
+				console.log('response data - user', user)
+				console.log('response data - emtpy order', emptyCharacter)
+				return emptyCharacter.save()
+			})
+			.then((responseData) => res.status(201).json({ responseData: responseData.toObject() }))
+			.catch(next)
 })
 
 // SIGN IN

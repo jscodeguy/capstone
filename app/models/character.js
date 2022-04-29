@@ -5,10 +5,12 @@ const characterSchema = new mongoose.Schema(
 		name: {
 			type: String,
 			required: true,
+			default: 'zonk',
 		},
 		class: {
 			type: String,
 			required: true,
+			default: "zink"
 		},
         coins: {
             type: Number,
@@ -23,7 +25,7 @@ const characterSchema = new mongoose.Schema(
 		owner: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
-			required: true,
+			// required: true,
 			unique: true
 		},
 	},
