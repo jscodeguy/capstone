@@ -70,13 +70,14 @@ router.post('/sign-up', (req, res, next) => {
 		.catch(next)
 
 		Promise.all([newUser, newCharacter])
-			.then( responseData => {
+			.then(responseData => {
 				const user = responseData[0]
 				const emptyCharacter = responseData[1]
 				emptyCharacter.owner = user._id
+				user.playerCharacter = emptyCharacter
 				console.log('response data - user', user)
-				console.log('response data - emtpy order', emptyCharacter)
-				return emptyCharacter.save()
+				console.log('response data - emptyCharacter', emptyCharacter)
+				return emptyCharacter.save() && user.save()
 			})
 			.then((responseData) => res.status(201).json({ responseData: responseData.toObject() }))
 			.catch(next)
