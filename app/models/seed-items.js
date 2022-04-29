@@ -11,7 +11,8 @@ const startItems = [
     { description: 'background', cost: 150, sprite: "image-url"},
     { description: 'parakeet', cost: 450, sprite: "image-url"},
     { description: 'drip', cost: 950, sprite: "image-url"},
-    { description: 'couch', cost: 10, sprite: "image-url"}
+    { description: 'couch', cost: 10, sprite: "image-url"},
+    { description: 'mug', cost: 5, sprite: "mug-url"}
 ]
 
 //first we connect to the db via mongoose
