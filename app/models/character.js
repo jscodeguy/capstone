@@ -7,6 +7,11 @@ const characterSchema = new mongoose.Schema(
 			required: true,
 			default: 'zonk',
 		},
+		new: {
+			type: Boolean
+			required: true,
+			default: true
+		},
 		class: {
 			type: String,
 			required: true,
