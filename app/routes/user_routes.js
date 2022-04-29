@@ -82,6 +82,7 @@ router.post('/sign-up', (req, res, next) => {
 			.catch(next)
 })
 
+// test
 // SIGN IN
 // POST /sign-in
 router.post('/sign-in', (req, res, next) => {
