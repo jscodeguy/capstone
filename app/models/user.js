@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Character',
 		},
+		playerStore: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Store',
+		},
 		token: String,
 	},
 	{

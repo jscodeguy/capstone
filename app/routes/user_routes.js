@@ -17,6 +17,7 @@ const BadCredentialsError = errors.BadCredentialsError
 
 const User = require('../models/user')
 const Character = require('../models/character')
+const Store = require('../models/store')
 
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
@@ -62,6 +63,7 @@ router.post('/sign-up', (req, res, next) => {
 		.catch(next)
 
 	const newCharacter = Character.create(req.body.character)
+	const newStore = Store.create(req.body.store)
 
 		.then( character => {
 			return character
@@ -69,15 +71,19 @@ router.post('/sign-up', (req, res, next) => {
 		// if an error occurs, pass it to the error handler
 		.catch(next)
 
-		Promise.all([newUser, newCharacter])
+		Promise.all([newUser, newCharacter, newStore])
 			.then(responseData => {
 				const user = responseData[0]
 				const emptyCharacter = responseData[1]
+				const emptyStore = responseData[2]
 				emptyCharacter.owner = user._id
+				emptyStore.owner= user._id
 				user.playerCharacter = emptyCharacter
+				user.playerStore = emptyStore
 				console.log('response data - user', user)
 				console.log('response data - emptyCharacter', emptyCharacter)
-				return emptyCharacter.save() && user.save()
+				console.log('response data - emptyStore', emptyStore)
+				return emptyCharacter.save() && emptyStore.save() && user.save()
 			})
 			.then((responseData) => res.status(201).json({ responseData: responseData.toObject() }))
 			.catch(next)

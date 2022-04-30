@@ -30,25 +30,25 @@ const router = express.Router()
 
 // INDEX
 // GET /tasks
-// router.get('/task', requireToken, (req, res, next) => {
-// 	Task.find()
-// 		.then((tasks) => {
-// 			// `tasks` will be an array of Mongoose documents
-// 			// we want to convert each one to a POJO, so we use `.map` to
-// 			// apply `.toObject` to each one
-// 			return tasks.map((task) => task.toObject())
-// 		})
-// 		// respond with status 200 and JSON of the tasks
-// 		.then((tasks) => res.status(200).json({ tasks: tasks }))
-// 		// if an error occurs, pass it to the handler
-// 		.catch(next)
-// })
+router.get('/store', requireToken, (req, res, next) => {
+	Store.find()
+		.then((stores) => {
+			// `characters` will be an array of Mongoose documents
+			// we want to convert each one to a POJO, so we use `.map` to
+			// apply `.toObject` to each one
+			return stores.map((store) => store.toObject())
+		})
+		// respond with status 200 and JSON of the characters
+		.then((stores) => res.status(200).json({ stores: stores }))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
 
 // SHOW
 // GET /tasks/5a7db6c74d55bc51bdf39793
 router.get('/store/view', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
-
+ 
 	Store.find()
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "task" JSON
