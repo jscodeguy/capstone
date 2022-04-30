@@ -31,6 +31,30 @@ const router = express.Router()
 // POST /sign-up
 router.post('/sign-up', (req, res, next) => {
 	// start a promise chain, so that any errors will pass to `handle`
+	const startStore = 
+{
+    inventory: [
+            {
+            item: { 
+                description: 'parakeet', 
+                cost: 450, 
+                sprite: "image-url"
+                } 
+            },
+            {
+            item: { 
+                description: 'drip', 
+                cost: 950, 
+                sprite: "image-url"}
+            },
+            {
+            item: { 
+                description: 'mug', 
+                cost: 5, 
+                sprite: "image-url"}
+            }
+        ]
+}
 	const newUser = Promise.resolve(req.body.credentials)
 		// reject any requests where `credentials.password` is not present, or where
 		// the password is an empty string
@@ -63,13 +87,17 @@ router.post('/sign-up', (req, res, next) => {
 		.catch(next)
 
 	const newCharacter = Character.create(req.body.character)
-	const newStore = Store.create(req.body.store)
-
 		.then( character => {
 			return character
 		})
-		// if an error occurs, pass it to the error handler
 		.catch(next)
+	
+	const newStore = Store.create(startStore)
+		.then(store => {
+			return store
+		})
+		.catch(next)
+		// if an error occurs, pass it to the error handler
 
 		Promise.all([newUser, newCharacter, newStore])
 			.then(responseData => {
@@ -83,8 +111,6 @@ router.post('/sign-up', (req, res, next) => {
 				console.log('response data - user', user)
 				console.log('response data - emptyCharacter', emptyCharacter)
 				console.log('response data - emptyStore', emptyStore)
-				console.log('response data - emptyStore', emptyStore)
-
 				return emptyCharacter.save() && emptyStore.save() && user.save()
 			})
 			.then((responseData) => res.status(201).json({ responseData: responseData.toObject() }))
