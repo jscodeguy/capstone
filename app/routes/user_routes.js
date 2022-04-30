@@ -83,6 +83,8 @@ router.post('/sign-up', (req, res, next) => {
 				console.log('response data - user', user)
 				console.log('response data - emptyCharacter', emptyCharacter)
 				console.log('response data - emptyStore', emptyStore)
+				console.log('response data - emptyStore', emptyStore)
+
 				return emptyCharacter.save() && emptyStore.save() && user.save()
 			})
 			.then((responseData) => res.status(201).json({ responseData: responseData.toObject() }))
