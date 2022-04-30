@@ -3,32 +3,58 @@
 // we'll need to be careful with our seed here, and when we run it, because it will remove all the items first, then add the new ones. 
 
 const mongoose = require('mongoose')
-const Item = require('./item')
+// const Item = require('./item')
+const Store = require('./store')
 
 const db = require('../../config/db')
 
-const startItems = [
-    { description: 'background', cost: 150, sprite: "image-url"},
-    { description: 'parakeet', cost: 450, sprite: "image-url"},
-    { description: 'drip', cost: 950, sprite: "image-url"},
-    { description: 'couch', cost: 10, sprite: "image-url"},
-    { description: 'mug', cost: 5, sprite: "mug-url"}
-]
+const startStore = 
+{
+    inventory: [
+            {
+            item: { 
+                description: 'parakeet', 
+                cost: 450, 
+                sprite: "image-url"
+                } 
+            },
+            {
+            item: { 
+                description: 'drip', 
+                cost: 950, 
+                sprite: "image-url"}
+            },
+            {
+            item: { 
+                description: 'mug', 
+                cost: 5, 
+                sprite: "image-url"}
+            }
+        ]
+}
 
+
+
+// item: { description: 'background', cost: 150, sprite: "image-url"},
+// { description: 'parakeet', cost: 450, sprite: "image-url"},
+// { description: 'drip', cost: 950, sprite: "image-url"},
+// { description: 'couch', cost: 10, sprite: "image-url"},
+// { description: 'mug', cost: 5, sprite: "mug-url"}
 //first we connect to the db via mongoose
 mongoose.connect(db, {
 	useNewUrlParser: true,
 })
     .then(() => {
-        // then we remove all the items except the ones that have an owner
-        Item.deleteMany({ owner: null })
-            .then(deletedItems => {
-                console.log('deleted items', deletedItems)
-                // then we create using the startitems array
+        // then we remove all the store items except the ones that have an owner
+        Store.deleteMany({ owner: null })
+            .then(deletedStore => {
+                console.log('deleted items', deletedStore)
+                // then we create using the startstore array
                 // we'll use console logs to check if it's working or if there are errors
-                Item.create(startItems)
-                    .then(newItems => {
-                        console.log('the new items', newItems)
+                Store.create(startStore)
+                    .then(newStore => {
+                        console.log('the new store', newStore)
+                        console.log('this is item', newStore.inventory[2].item.description)
                         mongoose.connection.close()
                     })
                     .catch(err => {
