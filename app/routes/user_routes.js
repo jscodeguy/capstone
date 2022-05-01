@@ -39,20 +39,25 @@ router.post('/sign-up', (req, res, next) => {
             item: { 
                 description: 'parakeet', 
                 cost: 450, 
-                sprite: "image-url"
+                sprite: "image-url",
+				bought: false
                 } 
             },
             {
             item: { 
                 description: 'drip', 
                 cost: 950, 
-                sprite: "image-url"}
+                sprite: "image-url",
+				bought: false
+			}
             },
             {
             item: { 
                 description: 'mug', 
                 cost: 5, 
-                sprite: "image-url"}
+                sprite: "image-url",
+				bought: false
+			}
             }
         ]
 }
