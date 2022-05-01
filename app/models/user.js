@@ -11,9 +11,6 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		toDoLists: {
-			type: Array
-		},
 		playerCharacter: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Character',
@@ -21,6 +18,10 @@ const userSchema = new mongoose.Schema(
 		playerStore: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Store',
+		},
+		playerTodo: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'ToDoList',
 		},
 		token: String,
 	},
