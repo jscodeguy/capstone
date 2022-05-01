@@ -3,8 +3,7 @@ const mongoose = require('mongoose')
 const toDoListSchema = new mongoose.Schema(
 	{
 		date: {
-			type: String,
-			required: true,
+			type: String
 		},
         tasks: {
             type: Array,
@@ -12,7 +11,8 @@ const toDoListSchema = new mongoose.Schema(
 		owner: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
-			required: true,
+			// required: true,
+			unique: true
 		},
 	},
 	{

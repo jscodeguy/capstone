@@ -18,6 +18,7 @@ const BadCredentialsError = errors.BadCredentialsError
 const User = require('../models/user')
 const Character = require('../models/character')
 const Store = require('../models/store')
+const ToDoList = require('../models/todolist')
 
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
@@ -97,21 +98,32 @@ router.post('/sign-up', (req, res, next) => {
 			return store
 		})
 		.catch(next)
+
+	const newTodo = ToDoList.create(req.body.todo)
+		.then(todo => {
+			return todo
+		})
+		.catch(next)
+
 		// if an error occurs, pass it to the error handler
 
-		Promise.all([newUser, newCharacter, newStore])
+		Promise.all([newUser, newCharacter, newStore, newTodo])
 			.then(responseData => {
 				const user = responseData[0]
 				const emptyCharacter = responseData[1]
 				const emptyStore = responseData[2]
+				const emptyTodo = responseData[3]
 				emptyCharacter.owner = user._id
 				emptyStore.owner= user._id
+				emptyTodo.owner= user._id
 				user.playerCharacter = emptyCharacter
 				user.playerStore = emptyStore
+				user.playerTodo = emptyTodo
 				console.log('response data - user', user)
 				console.log('response data - emptyCharacter', emptyCharacter)
 				console.log('response data - emptyStore', emptyStore)
-				return emptyCharacter.save() && emptyStore.save() && user.save()
+				console.log('response data - emptyTodo', emptyTodo)
+				return emptyCharacter.save() && emptyStore.save() && emptyTodo.save() && user.save()
 			})
 			.then((responseData) => res.status(201).json({ responseData: responseData.toObject() }))
 			.catch(next)
@@ -128,6 +140,7 @@ router.post('/sign-in', (req, res, next) => {
 	User.findOne({ email: req.body.credentials.email })
 		.populate('playerCharacter')
 		.populate('playerStore')
+		.populate('playerTodo')
 		.then((record) => {
 			// if we didn't find a user with that email, send 401
 			if (!record) {
