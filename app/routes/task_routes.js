@@ -85,6 +85,7 @@ router.patch('/task/:id/edit', requireToken, removeBlanks, (req, res, next) => {
 		.then(handle404)
 		.then((task) => {
 			console.log('this is task in task_routes PATCH', task)
+			console.log('this is incoming task in task_routes PATCH', req.body.task)
 			// pass the `req` object and the Mongoose record to `requireOwnership`
 			// it will throw an error if the current user isn't the owner
 			requireOwnership(req, task)
