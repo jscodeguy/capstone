@@ -94,8 +94,8 @@ router.post('/character', requireToken, (req, res, next) => {
 router.patch('/character/:id', requireToken, removeBlanks, (req, res, next) => {
 	// if the client attempts to change the `owner` property by including a new
 	// owner, prevent that by deleting that key/value pair
-	delete req.body.character.owner
-
+	console.log('this is req.params.id', req.params.id)
+    console.log('this is req.body', req.body)
 	Character.findById(req.params.id)
 		.then(handle404)
 		.then((character) => {
