@@ -75,20 +75,21 @@ router.post('/store', requireToken, (req, res, next) => {
 
 // UPDATE
 // PATCH /tasks/5a7db6c74d55bc51bdf39793
-router.patch('/store', requireToken, removeBlanks, (req, res, next) => {
+router.patch('/store/:id/edit', requireToken, removeBlanks, (req, res, next) => {
 	// if the client attempts to change the `owner` property by including a new
 	// owner, prevent that by deleting that key/value pair
 	delete req.body.task.owner
 
-	Store.find()
+	Store.findById(req.params.id)
 		.then(handle404)
 		.then((store) => {
 			// pass the `req` object and the Mongoose record to `requireOwnership`
 			// it will throw an error if the current user isn't the owner
 			// requireOwnership(req, task)
+			requireOwnership(req, store)
 
 			// pass the result of Mongoose's `.update` to the next `.then`
-			return store.updateOne()
+			return store.updateOne(req.body.store)
 		})
 		// if that succeeded, return 204 and no JSON
 		.then(() => res.sendStatus(204))
