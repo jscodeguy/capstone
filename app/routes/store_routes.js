@@ -25,9 +25,11 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
+
 /////////////////////////
 // INDEX -> GET /tasks //
 /////////////////////////
+
 router.get('/store', requireToken, (req, res, next) => {
 	Store.find()
 		.then((stores) => {
