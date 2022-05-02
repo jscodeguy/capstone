@@ -89,7 +89,7 @@ router.patch('/store/:id/edit', requireToken, removeBlanks, (req, res, next) => 
 			requireOwnership(req, store)
 
 			// pass the result of Mongoose's `.update` to the next `.then`
-			return store.updateOne(req.body.store)
+			return store.updateOne(req.data.store)
 		})
 		// if that succeeded, return 204 and no JSON
 		.then(() => res.sendStatus(204))
