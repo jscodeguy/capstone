@@ -2,36 +2,34 @@
 const express = require('express')
 // Passport docs: http://www.passportjs.org/docs/
 const passport = require('passport')
-
 // pull in Mongoose model for store
 const Store = require('../models/store')
-
-// this is a collection of methods that help us detect situations when we need
-// to throw a custom error
+// this is a collection of methods that help us detect situations when we need to throw a custom error
 const customErrors = require('../../lib/custom_errors')
-
 // we'll use this function to send 404 when non-existant document is requested
 const handle404 = customErrors.handle404
-// we'll use this function to send 401 when a user tries to modify a resource
-// that's owned by someone else
+// we'll use this function to send 401 when a user tries to modify a resource that's owned by someone else
 const requireOwnership = customErrors.requireOwnership
-
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { task: { title: '', text: 'foo' } } -> { task: { text: 'foo' } }
+
+////////////////
+// MIDDLEWARE //
+////////////////
 const removeBlanks = require('../../lib/remove_blank_fields')
 const { Timestamp } = require('mongodb')
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
 const requireToken = passport.authenticate('bearer', { session: false })
-
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
-// test
 
-// INDEX
-// GET /tasks
+/////////////////////////
+// INDEX -> GET /tasks //
+/////////////////////////
+
 router.get('/store', requireToken, (req, res, next) => {
 	Store.find()
 		.then((stores) => {
@@ -46,8 +44,9 @@ router.get('/store', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-// SHOW
-// GET /tasks/5a7db6c74d55bc51bdf39793
+////////////////////
+// GET /tasks/:id //
+////////////////////
 router.get('/store/view', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
  
@@ -59,10 +58,10 @@ router.get('/store/view', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-// CREATE
-// POST /tasks
+///////////////////////////
+// CREATE -> POST /tasks //
+///////////////////////////
 router.post('/store', requireToken, (req, res, next) => {
-	
 
 	Store.create(req.body.store)
 		// respond to succesful `create` with status 201 and JSON of new "task"
@@ -75,8 +74,9 @@ router.post('/store', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-// UPDATE
-// PATCH /tasks/5a7db6c74d55bc51bdf39793
+/////////////////////////////////////
+// UPDATE -> PATCH /tasks/:id/edit //
+/////////////////////////////////////
 router.patch('/store/:id/edit', requireToken, removeBlanks, (req, res, next) => {
 	// if the client attempts to change the `owner` property by including a new
 	// owner, prevent that by deleting that key/value pair
@@ -98,22 +98,5 @@ router.patch('/store/:id/edit', requireToken, removeBlanks, (req, res, next) => 
 		// if an error occurs, pass it to the handler
 		.catch(next)
 })
-
-// DESTROY
-// DELETE /tasks/5a7db6c74d55bc51bdf39793
-// router.delete('/task/:id', requireToken, (req, res, next) => {
-// 	Task.findById(req.params.id)
-// 		.then(handle404)
-// 		.then((task) => {
-// 			// throw an error if current user doesn't own `task`
-// 			requireOwnership(req, task)
-// 			// delete the task ONLY IF the above didn't throw
-// 			task.deleteOne()
-// 		})
-// 		// send back 204 and no content if the deletion succeeded
-// 		.then(() => res.sendStatus(204))
-// 		// if an error occurs, pass it to the handler
-// 		.catch(next)
-// })
 
 module.exports = router
