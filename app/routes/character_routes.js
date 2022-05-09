@@ -15,7 +15,6 @@ const requireOwnership = customErrors.requireOwnership
 // MIDDLEWARE //
 ////////////////
 const removeBlanks = require('../../lib/remove_blank_fields')
-const character = require('../models/character')
 // passing this as a second argument to `router.<verb>` will make it so that a token MUST be passed for that route to be available, it will also set `req.user`
 const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
@@ -106,7 +105,7 @@ router.patch('/character/:id', requireToken, removeBlanks, (req, res, next) => {
 			// pass the result of Mongoose's `.update` to the next `.then`
 			return character.updateOne(req.body.character)
 		})
-		.save(character)
+		// .save(character)
 		// if that succeeded, return 204 and no JSON
 		.then(() => res.sendStatus(204))
 		// if an error occurs, pass it to the handler

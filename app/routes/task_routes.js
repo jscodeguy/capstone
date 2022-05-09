@@ -58,8 +58,9 @@ router.get('/task/:id', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-// CREATE
-// POST /tasks
+///////////////////////////
+// CREATE -> POST /tasks //
+///////////////////////////
 router.post('/task', requireToken, (req, res, next) => {
 	console.log('this is req.body', req.body)
 	req.body.task.owner = req.user.id
@@ -75,8 +76,9 @@ router.post('/task', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-// UPDATE
-// PATCH /tasks/5a7db6c74d55bc51bdf39793
+/////////////////////////////////////
+// UPDATE -> PATCH  //
+/////////////////////////////////////
 router.patch('/task/:id/edit', requireToken, removeBlanks, (req, res, next) => {
 	// if the client attempts to change the `owner` property by including a new
 	// owner, prevent that by deleting that key/value pair
@@ -100,10 +102,12 @@ router.patch('/task/:id/edit', requireToken, removeBlanks, (req, res, next) => {
 		.catch(next)
 })
 
-// DESTROY
-// DELETE /tasks/5a7db6c74d55bc51bdf39793
+///////////////////////////
+// DELETE -> DESTROY /tasks //
+///////////////////////////
 router.delete('/task/:id', requireToken, (req, res, next) => {
 	Task.findById(req.params.id)
+		//pass through the error handler if 404 no content is returned
 		.then(handle404)
 		.then((task) => {
 			// throw an error if current user doesn't own `task`
