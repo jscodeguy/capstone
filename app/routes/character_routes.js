@@ -47,6 +47,7 @@ router.get('/character/view', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
     const userId = req.user._id
 	Character.findOne({owner:userId})
+		//pass through the error handler if 404 no content is returned
 		.then(handle404)
    	 	// respond with status 200 and JSON of the characters
     	.then((character) => {
@@ -63,7 +64,9 @@ router.get('/character/view', requireToken, (req, res, next) => {
 router.get('/character/:id', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
 	Character.findById(req.params.id)
+		//populate the owner field/id
 		.populate('owner')
+		//pass through the error handler if 404 no content is returned
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "character" JSON
 		.then((character) => res.status(200).json({ character: character.toObject() }))
@@ -96,6 +99,7 @@ router.patch('/character/:id', requireToken, removeBlanks, (req, res, next) => {
 	console.log('this is req.params.id', req.params.id)
     console.log('this is req.body', req.body)
 	Character.findById(req.params.id)
+		//pass through the error handler if 404 no content is returned
 		.then(handle404)
 		.then((character) => {
 			// pass the `req` object and the Mongoose record to `requireOwnership`
