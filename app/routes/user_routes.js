@@ -28,8 +28,9 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
-// SIGN UP
-// POST /sign-up
+///////////////////////////
+// CREATE -> POST SIGN-UP //
+///////////////////////////
 router.post('/sign-up', (req, res, next) => {
 	// start a promise chain, so that any errors will pass to `handle`
 	const startStore = 
@@ -91,19 +92,19 @@ router.post('/sign-up', (req, res, next) => {
 		// won't be send because of the `transform` in the User model
 		// pass any errors along to the error handler
 		.catch(next)
-
+	//creates the character on signup
 	const newCharacter = Character.create(req.body.character)
 		.then( character => {
 			return character
 		})
 		.catch(next)
-	
+	//creates the store on signup
 	const newStore = Store.create(startStore)
 		.then(store => {
 			return store
 		})
 		.catch(next)
-
+	//creates the todolist on signup
 	const newTodo = ToDoList.create(req.body.todo)
 		.then(todo => {
 			return todo
@@ -113,38 +114,53 @@ router.post('/sign-up', (req, res, next) => {
 		// if an error occurs, pass it to the error handler
 
 		Promise.all([newUser, newCharacter, newStore, newTodo])
+			//the promise chain assings the user, character, store and todolist to the owners ._id
 			.then(responseData => {
+				//the first index of response data returns the user 
 				const user = responseData[0]
+				//the second index of response data returns the character
 				const emptyCharacter = responseData[1]
+				//the third index of response data returns the store
 				const emptyStore = responseData[2]
+				//the fourth index of response data returns the todolist
 				const emptyTodo = responseData[3]
+				//assigning the character to the users id
 				emptyCharacter.owner = user._id
+				//assigning the store to the users id
 				emptyStore.owner= user._id
+				//assigning the todolist to the users id
 				emptyTodo.owner= user._id
+				//sets the player character key to the character object
 				user.playerCharacter = emptyCharacter
+				//sets the player store key to the store object
 				user.playerStore = emptyStore
+				//sets the player todolist key to the todolist object
 				user.playerTodo = emptyTodo
 				console.log('response data - user', user)
 				console.log('response data - emptyCharacter', emptyCharacter)
 				console.log('response data - emptyStore', emptyStore)
 				console.log('response data - emptyTodo', emptyTodo)
+				//saves the created keys to the user model
 				return emptyCharacter.save() && emptyStore.save() && emptyTodo.save() && user.save()
 			})
 			.then((responseData) => res.status(201).json({ responseData: responseData.toObject() }))
 			.catch(next)
 })
 
-// test
-// SIGN IN
-// POST /sign-in
+///////////////////////////
+// CREATE -> POST SIGN IN //
+///////////////////////////
 router.post('/sign-in', (req, res, next) => {
 	const pw = req.body.credentials.password
 	let user
 
 	// find a user based on the email that was passed
 	User.findOne({ email: req.body.credentials.email })
+		//fills in the playercharacter object on sign in
 		.populate('playerCharacter')
+		//fills in the playerstore object on sign in
 		.populate('playerStore')
+		//fills in the playertodo object on sign in
 		.populate('playerTodo')
 		.then((record) => {
 			// if we didn't find a user with that email, send 401
@@ -179,8 +195,9 @@ router.post('/sign-in', (req, res, next) => {
 		.catch(next)
 })
 
-// CHANGE password
-// PATCH /change-password
+/////////////////////////////////////
+// UPDATE -> PATCH  CHANGE PASSWORD //
+/////////////////////////////////////
 router.patch('/change-password', requireToken, (req, res, next) => {
 	let user
 	// `req.user` will be determined by decoding the token payload
@@ -213,6 +230,9 @@ router.patch('/change-password', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
+/////////////////////////////////
+// DELETE -> DESTROY /SIGN-OUT //
+/////////////////////////////////
 router.delete('/sign-out', requireToken, (req, res, next) => {
 	// create a new random token for the user, invalidating the current one
 	req.user.token = crypto.randomBytes(16)
