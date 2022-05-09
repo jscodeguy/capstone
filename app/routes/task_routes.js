@@ -51,6 +51,7 @@ router.get('/task/:id', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
 	const taskId = req.params.id
 	Task.findById(taskId)
+		//pass through the error handler if 404 no content is returned
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "task" JSON
 		.then((task) => res.status(200).json({ task: task.toObject() }))
@@ -83,8 +84,8 @@ router.patch('/task/:id/edit', requireToken, removeBlanks, (req, res, next) => {
 	// if the client attempts to change the `owner` property by including a new
 	// owner, prevent that by deleting that key/value pair
 	delete req.body.task.owner
-
 	Task.findById(req.params.id)
+		//pass through the error handler if 404 no content is returned
 		.then(handle404)
 		.then((task) => {
 			console.log('this is task in task_routes PATCH', task)
@@ -92,7 +93,6 @@ router.patch('/task/:id/edit', requireToken, removeBlanks, (req, res, next) => {
 			// pass the `req` object and the Mongoose record to `requireOwnership`
 			// it will throw an error if the current user isn't the owner
 			requireOwnership(req, task)
-
 			// pass the result of Mongoose's `.update` to the next `.then`
 			return task.updateOne(req.body.task)
 		})
