@@ -11,7 +11,7 @@ const handle404 = customErrors.handle404
 // we'll use this function to send 401 when a user tries to modify a resource that's owned by someone else
 const requireOwnership = customErrors.requireOwnership
 // this is middleware that will remove blank fields from `req.body`, e.g.
-// { task: { title: '', text: 'foo' } } -> { task: { text: 'foo' } }
+// { store: { title: '', text: 'foo' } } -> { store: { text: 'foo' } }
 
 ////////////////
 // MIDDLEWARE //
@@ -26,7 +26,7 @@ const requireToken = passport.authenticate('bearer', { session: false })
 const router = express.Router()
 
 /////////////////////////
-// INDEX -> GET /tasks //
+// INDEX -> GET /stores //
 /////////////////////////
 router.get('/store', requireToken, (req, res, next) => {
 	Store.find()
@@ -43,26 +43,25 @@ router.get('/store', requireToken, (req, res, next) => {
 })
 
 ////////////////////
-// GET /tasks/:id //
+// GET /stores/:id //
 ////////////////////
 router.get('/store/view', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
- 
 	Store.find()
+		//pass through the error handler if 404 no content is returned
 		.then(handle404)
-		// if `findById` is succesful, respond with 200 and "task" JSON
+		// if `findById` is succesful, respond with 200 and "store" JSON
 		.then((store) => res.status(200).json({ store: store.toObject() }))
 		// if an error occurs, pass it to the handler
 		.catch(next)
 })
 
 ///////////////////////////
-// CREATE -> POST /tasks //
+// CREATE -> POST /stores //
 ///////////////////////////
 router.post('/store', requireToken, (req, res, next) => {
-
 	Store.create(req.body.store)
-		// respond to succesful `create` with status 201 and JSON of new "task"
+		// respond to succesful `create` with status 201 and JSON of new "store"
 		.then((store) => {
 			res.status(201).json({ store: store.toObject() })
 		})
@@ -73,19 +72,19 @@ router.post('/store', requireToken, (req, res, next) => {
 })
 
 /////////////////////////////////////
-// UPDATE -> PATCH /tasks/:id/edit //
+// UPDATE -> PATCH /stores/:id/edit //
 /////////////////////////////////////
 router.patch('/store/:id/edit', requireToken, removeBlanks, (req, res, next) => {
 	// if the client attempts to change the `owner` property by including a new
 	// owner, prevent that by deleting that key/value pair
-	delete req.body.task.owner
-
+	delete req.body.store.owner
 	Store.findById(req.params.id)
+		//pass through the error handler if 404 no content is returned
 		.then(handle404)
 		.then((store) => {
 			// pass the `req` object and the Mongoose record to `requireOwnership`
 			// it will throw an error if the current user isn't the owner
-			// requireOwnership(req, task)
+			// requireOwnership(req, store)
 			requireOwnership(req, store)
 
 			// pass the result of Mongoose's `.update` to the next `.then`
