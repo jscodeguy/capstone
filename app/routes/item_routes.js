@@ -46,6 +46,7 @@ router.get('/items', requireToken, (req, res, next) => {
 router.get('/items/:id', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
 	Item.findById(req.params.id)
+		//pass through the error handler if 404 no content is returned
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "item" JSON
 		.then((item) => res.status(200).json({ item: item.toObject() }))
