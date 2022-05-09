@@ -27,8 +27,9 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
-// INDEX
-// GET 
+/////////////////////////
+// INDEX -> GET /todo //
+/////////////////////////
 router.get('/todo', requireToken, (req, res, next) => {
 	ToDoList.find()
 		.then((toDoLists) => {
@@ -43,11 +44,13 @@ router.get('/todo', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-// SHOW
-// GET /todos/5a7db6c74d55bc51bdf39793
+////////////////////////////
+// SHOW -> GET /todos/:id //
+////////////////////////////
 router.get('/todos/:id', requireToken, (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
 	ToDoList.findById(req.params.id)
+		//pass through the error handler if 404 no content is returned
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "todo" JSON
 		.then((todo) => res.status(200).json({ todo: todo.toObject() }))
@@ -55,8 +58,9 @@ router.get('/todos/:id', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-// CREATE
-// POST 
+///////////////////////////
+// CREATE -> POST /todo //
+/////////////////////////// 
 router.post('/todo', requireToken, (req, res, next) => {
     // set up date method here --> (this is to set up a to do list time that will reset daily to our seeded data that is an empty list so that you will have a clear list everyday)
 	const current = new Date()
